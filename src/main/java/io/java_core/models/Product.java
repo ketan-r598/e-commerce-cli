@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
-    private String id;
+    private final String id;
     private String name;
     private String type;
     private Double price;
@@ -44,12 +44,12 @@ public class Product {
     public boolean equals(Object o) {
         if (!(o instanceof Product)) return false;
         Product product = (Product) o;
-        return Objects.equals(name, product.name) && Objects.equals(type, product.type);
+        return Objects.equals(name, product.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, type);
+        return Objects.hash(id);
     }
 
     @Override

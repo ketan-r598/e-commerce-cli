@@ -1,4 +1,4 @@
-package io.java_core.Screens;
+package io.java_core.screens;
 
 public interface IScreen {
 

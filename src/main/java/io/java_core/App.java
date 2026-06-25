@@ -1,6 +1,6 @@
 package io.java_core;
 
-import io.java_core.Screens.*;
+import io.java_core.screens.*;
 import io.java_core.models.Role;
 import io.java_core.models.User;
 import io.java_core.services.*;

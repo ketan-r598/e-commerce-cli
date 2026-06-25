@@ -37,7 +37,7 @@ public class ProductStore {
         productStoreMap.put(p9.getId(), p9);
     }
 
-    public Optional<Product> findById(Long id) {
+    public Optional<Product> findById(String id) {
         return Optional.ofNullable(productStoreMap.getOrDefault(id, null));
     }
 

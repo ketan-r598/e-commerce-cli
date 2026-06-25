@@ -1,4 +1,4 @@
-package io.java_core.Screens;
+package io.java_core.screens;
 
 import io.java_core.services.CartService;
 import io.java_core.services.OrderService;

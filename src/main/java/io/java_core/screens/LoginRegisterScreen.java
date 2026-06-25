@@ -1,6 +1,5 @@
-package io.java_core.Screens;
+package io.java_core.screens;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class LoginRegisterScreen implements IScreen {
