@@ -1,30 +1,41 @@
 package io.java_core.models;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.Objects;
 import java.util.UUID;
 
 public class User {
-    private String id;
+    private final Long id;
     private String name;
     private String email;
     private Role role;
     private String password;
+    private String address;
 
 
-    public User(String name, String email, String password, Role role) {
-        this.id = UUID.randomUUID().toString();
+    public User(String name, String email, String password, String address) {
+        this.id = Math.abs(UUID.randomUUID().getLeastSignificantBits());
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.address = address;
+
+//      By default, every new user will have the role of user. Admins can later change the role to
+//      admin, if at all required.
+        this.role = Role.USER;
     }
 
-    public String getId() {
-        return id;
-    }
+
+//  Getters
 
     public String getName() {
         return name;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -38,6 +49,13 @@ public class User {
     public String getPassword() {
         return password;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+
+//  Setters
 
     public void setName(String name) {
         this.name = name;
@@ -55,26 +73,25 @@ public class User {
         this.password = password;
     }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(password, user.password);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, password);
+        return Objects.hashCode(id);
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", password='" + password + '\'' +
-                '}';
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
 }

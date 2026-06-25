@@ -13,25 +13,19 @@ public class UserService {
         this.userStore = userStore;
     }
 
-    public User findByEmail(String email) throws UserNotFoundException {
-        return userStore.findByEmail(email)
-                        .orElseThrow(() -> new UserNotFoundException("User does not exist"));
-    }
-
-    public User saveUser(User user) throws UserAlreadyExist {
-        return userStore.saveUser(user)
-                .orElseThrow(() -> new UserAlreadyExist("User Already exists"));
+//    TODO::
+    public Optional<User> findUser(String email) throws UserNotFoundException {
+        return Optional.empty();
     }
 
 //    TODO::
-    public User updateUser(User user) {
+    public User saveUser(User u) throws UserAlreadyExistsException {
         return null;
     }
 
 //    TODO::
-    public User deleteUser(User user) {
-        return null;
-    }
+    public User updateUser(User u) {return null;}
 
-
+//    TODO::
+    public User deleteUser(User u) {return null;}
 }
