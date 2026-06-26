@@ -8,7 +8,6 @@ import io.java_core.stores.UserStore;
 
 public class InitialSetup {
 
-//    TODO::
     public static IScreen setup() {
 
         GlobalContext context = GlobalContext.getInstance();
