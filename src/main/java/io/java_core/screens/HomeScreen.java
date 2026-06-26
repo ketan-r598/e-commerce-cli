@@ -1,41 +1,31 @@
 package io.java_core.screens;
 
-import io.java_core.models.Product;
-import io.java_core.services.CartService;
-import io.java_core.services.ProductService;
-
-import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class HomeScreen implements IScreen {
 
-//    private final Scanner scanner;
-//    private IScreen productScreen;
-//    private IScreen cartScreen;
-//    private IScreen loginRegistrationScreen;
-//    private final ProductService productService;
-//    private final CartService cartService;
-
-//    public HomeScreen(CartService cartService, ProductService productService) {
-//        scanner = new Scanner(System.in);
-//        this.productService = productService;
-//        this.cartService = cartService;
-//        cartScreen = null;
-//        loginRegistrationScreen = null;
-//    }
-
-//    public void setCartScreen(IScreen cartScreen) {
-//        this.cartScreen = cartScreen;
-//    }
-
-//    public void setLoginRegistrationScreen(IScreen loginRegistrationScreen) {
-//        this.loginRegistrationScreen = loginRegistrationScreen;
-//    }
-
-//    public void setProductScreen(IScreen productScreen) {
-//        this.productScreen = productScreen;
-//    }
+/*
+    private final Scanner scanner;
+    private IScreen productScreen;
+    private IScreen cartScreen;
+    private IScreen loginRegistrationScreen;
+    private final ProductService productService;
+    private final CartService cartService;
+    public HomeScreen(CartService cartService, ProductService productService) {
+        scanner = new Scanner(System.in);
+        this.productService = productService;
+        this.cartService = cartService;
+        cartScreen = null;
+        loginRegistrationScreen = null;
+    }
+    public void setCartScreen(IScreen cartScreen) {
+        this.cartScreen = cartScreen;
+    }
+    public void setLoginRegistrationScreen(IScreen loginRegistrationScreen) {
+        this.loginRegistrationScreen = loginRegistrationScreen;
+    }
+    public void setProductScreen(IScreen productScreen) {
+        this.productScreen = productScreen;
+    }
+*/
 
     @Override
     public IScreen display() {
