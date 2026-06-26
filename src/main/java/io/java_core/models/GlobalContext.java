@@ -13,11 +13,11 @@ public enum GlobalContext {
         this.context = new HashMap<>();
     }
 
-    public <T> void  add(String key, T value) {
+    public <T extends Object> void  add(String key, T value) {
         context.put(key, value);
     }
 
-    public <T> Optional<T> get(String key) {
+    public <T extends Object> Optional<T> get(String key) {
         return Optional.ofNullable((T) context.get(key));
     }
 

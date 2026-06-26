@@ -1,6 +1,8 @@
 package io.java_core.screens;
 
 import io.java_core.models.User;
+import io.java_core.services.AuthorizationService;
+import io.java_core.services.InvalidCredentialsException;
 import io.java_core.services.UserNotFoundException;
 import io.java_core.services.UserService;
 
@@ -9,12 +11,12 @@ import java.util.Scanner;
 public class LoginScreen implements IScreen {
 
     private Scanner scanner;
-    private UserService userService;
+    private AuthorizationService authService;
     private IScreen homeScreen;
 
-    public LoginScreen(UserService userService) {
+    public LoginScreen(AuthorizationService authService) {
         scanner = new Scanner(System.in);
-        this.userService = userService;
+        this.authService = authService;
         homeScreen = null;
     }
 
@@ -46,13 +48,13 @@ public class LoginScreen implements IScreen {
 //        TODO:: validate the inputs
 
         try {
-            User u = userService.findByEmail(email);
-            if(!u.getPassword().equals(password)) {
+            boolean isLoggedIn = authService.login(email, password);
+            if (!isLoggedIn) {
                 System.err.println("Wrong Password! Try Again!! Press Enter to continue.");
                 scanner.nextLine();
                 return this;
             }
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | InvalidCredentialsException e) {
             System.err.println("Oh Snap! User does not exist. Please try again");
             scanner.nextLine();
             return this;

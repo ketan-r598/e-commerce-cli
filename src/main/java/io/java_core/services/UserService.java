@@ -1,5 +1,6 @@
 package io.java_core.services;
 
+import io.java_core.models.Role;
 import io.java_core.models.User;
 import io.java_core.stores.UserStore;
 
@@ -11,21 +12,41 @@ public class UserService {
 
     public UserService(UserStore userStore) {
         this.userStore = userStore;
+
+        User adminUser = new User("admin", "admin@gmail.com","admin@123","NA");
+        adminUser.setRole(Role.ADMIN);
+        userStore.addUser(adminUser);
     }
 
-//    TODO::
-    public Optional<User> findUser(String email) throws UserNotFoundException {
-        return Optional.empty();
+    public Optional<User> findUser(String email) throws UserNotFoundException, IllegalArgumentException {
+        if(email == null || !email.contains("@"))
+            throw new IllegalArgumentException("Email id is not valid...");
+
+        return Optional.of(userStore.findByEmailId(email)
+                .orElseThrow(() -> new UserNotFoundException("User does not exists...")));
     }
 
-//    TODO::
     public User saveUser(User u) throws UserAlreadyExistsException {
-        return null;
+        if(userStore.findByEmailId(u.getEmail()).isEmpty()) {
+            return userStore.addUser(u);
+        } else {
+            throw new UserAlreadyExistsException("User Already Exist. Cannot create new user");
+        }
     }
 
-//    TODO::
-    public User updateUser(User u) {return null;}
+    public User updateUser(User u) throws UserNotFoundException{
+        if(userStore.findByEmailId(u.getEmail()).isEmpty()) {
+            throw new UserNotFoundException("User does not exists...");
+        } else {
+            return userStore.updateUser(u);
+        }
+    }
 
-//    TODO::
-    public User deleteUser(User u) {return null;}
+    public boolean deleteUser(User u) throws UserNotFoundException {
+        if(userStore.findByEmailId(u.getEmail()).isEmpty()) {
+            throw new UserNotFoundException("User does not exists...");
+        } else {
+            return userStore.deleteUser(u);
+        }
+    }
 }

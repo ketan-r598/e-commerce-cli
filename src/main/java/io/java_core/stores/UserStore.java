@@ -13,15 +13,30 @@ public class UserStore {
         userStoreMap = new HashMap<>();
     }
 
-//    TODO::
-    public Optional<User> findByEmailId() {return Optional.empty();}
 
-//    TODO::
-    public User addUser(User u) {return null;}
+    public Optional<User> findByEmailId(String email) {
+        return Optional.ofNullable(userStoreMap.getOrDefault(email, null));
+    }
 
-//    TODO::
-    public User updateUser(User u) {return null;}
+    public User addUser(User u) {
+        if (userStoreMap.containsKey(u.getEmail())) return null;
 
-//    TODO::
-    public boolean deleteUser(User u) {return false;}
+        else userStoreMap.put(u.getEmail(), u);
+        return userStoreMap.get(u.getEmail());
+    }
+
+
+    public User updateUser(User u) {
+        userStoreMap.put(u.getEmail(), u);
+        return userStoreMap.get(u.getEmail());
+    }
+
+
+    public boolean deleteUser(User u) {
+        if (userStoreMap.containsKey(u.getEmail())) {
+            userStoreMap.remove(u.getEmail());
+            return true;
+        }
+        return false;
+    }
 }
