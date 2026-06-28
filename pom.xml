@@ -16,12 +16,22 @@
 
   <dependencies>
 
+<!--      For bCrypt Encryption-->
+
+      <dependency>
+          <groupId>at.favre.lib</groupId>
+          <artifactId>bcrypt</artifactId>
+          <version>0.10.2</version>
+      </dependency>
+
+<!--      For serialization and deserialization-->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.14.0</version>
     </dependency>
 
+<!--      for Unit Testing-->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

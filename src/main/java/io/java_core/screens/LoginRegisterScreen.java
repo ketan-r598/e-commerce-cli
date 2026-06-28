@@ -1,9 +1,9 @@
 package io.java_core.screens;
 
-import io.java_core.models.GlobalContext;
 import io.java_core.models.Role;
 import io.java_core.models.User;
 import io.java_core.services.*;
+import io.java_core.utils.AuthContext;
 
 import java.util.Optional;
 import java.util.Scanner;
@@ -12,29 +12,21 @@ public class LoginRegisterScreen implements IScreen {
 
     private Scanner scanner;
     private UserService userService;
-    private AuthorizationService authorizationService;
+    private AuthenicationService authenicationService;
 
     private IScreen adminHomeScreen;
     private IScreen userHomeScreen;
 
-    public LoginRegisterScreen(UserService userService, AuthorizationService authorizationService) {
-        scanner = new Scanner(System.in);
-        this.userService = userService;
-        this.authorizationService = authorizationService;
-    }
-
-    public void setAdminHomeScreen(IScreen adminHomeScreen) {
-        this.adminHomeScreen = adminHomeScreen;
-    }
-
-    public void setUserHomeScreen(IScreen userHomeScreen) {
-        this.userHomeScreen = userHomeScreen;
-    }
-
     @Override
     public IScreen display() {
 
-//        Banner
+        banner();
+        int choice = retrieveChoice();
+        return performTask(choice);
+    }
+
+
+    private void banner() {
 
         System.out.println();
         System.out.println();
@@ -42,9 +34,9 @@ public class LoginRegisterScreen implements IScreen {
         System.out.println("         Register/Login Screen          ");
         System.out.println("========================================");
         System.out.println();
+    }
 
-
-//        Options
+    private int retrieveChoice() {
 
         System.out.println("1. Register as New User");
         System.out.println("2. Login");
@@ -54,23 +46,19 @@ public class LoginRegisterScreen implements IScreen {
         int choice = scanner.nextInt();
         scanner.nextLine();
 
+        return choice;
+    }
+
+    private IScreen performTask(int choice) {
         switch(choice) {
             case 1:
                 registerUser();
                 return this;
             case 2:
-                boolean isLoggedIn = loginUser();
-                if(!isLoggedIn) {
-                    System.out.println("User does not login...");
-                    return this;
-                }
+                Optional<User> loggedUser = Optional.ofNullable(loginUser());
 
-                GlobalContext context = GlobalContext.getInstance();
-                Optional<User> u = context.get("user");
-
-                if(u.isEmpty()) {
-                    System.out.println("Oh Snap!! Something went wrong... Try again...");
-                    System.out.println();
+                if(loggedUser.isEmpty()) {
+                    System.err.println("Oh Snap!! Something went wrong... Try again...");
                     System.out.println();
                     System.out.println();
                     System.out.println("Press enter to continue...");
@@ -78,10 +66,12 @@ public class LoginRegisterScreen implements IScreen {
                     return this;
                 }
 
-                if(u.get().getRole() == Role.ADMIN) {
+//                Adding to the context
+                AuthContext.addItem("user", loggedUser.get());
+
+                if(loggedUser.get().getRole() == Role.ADMIN) {
                     return adminHomeScreen;
                 } else return userHomeScreen;
-
 
             default:
                 System.err.print("Please select a correct option. Please Enter to continue.");
@@ -115,31 +105,30 @@ public class LoginRegisterScreen implements IScreen {
         System.out.print("Address: ");
         String address = scanner.nextLine().strip();
 
-        // validate the inputs - Skipping it...
+        // validate the inputs - Skipping it for now...
         User u = new User(name, email, password, address);
 
         try {
-            boolean isRegistered = authorizationService.singUp(u);
+            authenicationService.singUp(u);
             System.out.println();
-            System.out.println();
-            if(isRegistered) System.out.println("!!! Registered Successfully !!!");
-            System.out.println("Press Enter to Login...");
+            System.out.println("!!! Registered Successfully !!!");
+            System.out.print("Press Enter to Login...");
             scanner.nextLine();
-//            return true;
         } catch (UserAlreadyExistsException e) {
             System.out.println();
             System.out.println();
-            u.setPassword("****");
-            System.out.println("Oh Snap!! User " + u.toString() + " already exists...");
+            System.err.println("Oh Snap!! User " + u.toString() + " already exists...");
             System.out.println("Press Enter to try again...");
             scanner.nextLine();
-//            return false;
         }
     }
 
-    private boolean loginUser() {
+    private User loginUser() {
 
         System.out.println();
+        System.out.println("======================================");
+        System.out.println("                Login                 ");
+        System.out.println("======================================");
         System.out.println();
 
 //        Email
@@ -151,17 +140,33 @@ public class LoginRegisterScreen implements IScreen {
         String password = scanner.nextLine().strip();
 
         try {
-            return authorizationService.login(email, password);
+            return authenicationService.login(email, password);
         } catch (UserNotFoundException e) {
-            System.out.println("oh Snap!! User not found... Try again...");
+            System.err.println("oh Snap!! User not found... Try again...");
             System.out.println("Press Enter to continue...");
             scanner.nextLine();
-            return false;
+            return null;
         } catch (InvalidCredentialsException e) {
-            System.out.println("oh Snap!! Invalid Credentials... Try again...");
+            System.err.println("oh Snap!! Invalid Credentials... Try again...");
             System.out.println("Press Enter to continue...");
             scanner.nextLine();
-            return false;
+            return null;
         }
+    }
+
+
+//    Setters
+    public LoginRegisterScreen(UserService userService, AuthenicationService authenicationService) {
+        scanner = new Scanner(System.in);
+        this.userService = userService;
+        this.authenicationService = authenicationService;
+    }
+
+    public void setAdminHomeScreen(IScreen adminHomeScreen) {
+        this.adminHomeScreen = adminHomeScreen;
+    }
+
+    public void setUserHomeScreen(IScreen userHomeScreen) {
+        this.userHomeScreen = userHomeScreen;
     }
 }

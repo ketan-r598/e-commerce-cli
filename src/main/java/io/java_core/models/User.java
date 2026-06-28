@@ -1,7 +1,6 @@
 package io.java_core.models;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import io.java_core.utils.GsonUtils;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -16,7 +15,13 @@ public class User {
 
 
     public User(String name, String email, String password, String address) {
-        this.id = Math.abs(UUID.randomUUID().getLeastSignificantBits());
+
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(email);
+        Objects.requireNonNull(password);
+        Objects.requireNonNull(address);
+
+        this.id = UUID.randomUUID().getLeastSignificantBits();
         this.name = name;
         this.email = email;
         this.password = password;
@@ -77,6 +82,8 @@ public class User {
         this.address = address;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof User)) return false;
@@ -91,7 +98,6 @@ public class User {
 
     @Override
     public String toString() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(this);
+       return GsonUtils.serialize(this);
     }
 }

@@ -19,9 +19,7 @@ public class UserStore {
     }
 
     public User addUser(User u) {
-        if (userStoreMap.containsKey(u.getEmail())) return null;
-
-        else userStoreMap.put(u.getEmail(), u);
+        userStoreMap.put(u.getEmail(), u);
         return userStoreMap.get(u.getEmail());
     }
 
@@ -32,11 +30,7 @@ public class UserStore {
     }
 
 
-    public boolean deleteUser(User u) {
-        if (userStoreMap.containsKey(u.getEmail())) {
-            userStoreMap.remove(u.getEmail());
-            return true;
-        }
-        return false;
+    public User deleteUser(User u) {
+        return userStoreMap.remove(u);
     }
 }
