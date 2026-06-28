@@ -13,30 +13,24 @@ public class UserStore {
         userStoreMap = new HashMap<>();
     }
 
-    public Optional<User> findById(Long id) {
-        return Optional.ofNullable(userStoreMap.get(id));
+
+    public Optional<User> findByEmailId(String email) {
+        return Optional.ofNullable(userStoreMap.getOrDefault(email, null));
     }
 
-    public Optional<User> findByEmail(String email) {
-        return userStoreMap.values()
-                                .stream()
-                                .filter(u -> u.getEmail().equalsIgnoreCase(email))
-                                .findFirst();
+    public User addUser(User u) {
+        userStoreMap.put(u.getEmail(), u);
+        return userStoreMap.get(u.getEmail());
     }
 
-    public Optional<User> saveUser(User user) {
-        Optional<User> _user = findByEmail(user.getEmail());
 
-        if(_user.isPresent()) return Optional.empty();
-        userStoreMap.put(user.getId(), user);
-        return Optional.of(userStoreMap.get(user.getId()));
+    public User updateUser(User u) {
+        userStoreMap.put(u.getEmail(), u);
+        return userStoreMap.get(u.getEmail());
     }
 
-//    TODO::
-    public Optional<User> deleteUser(User user) { return Optional.empty();}
 
-//    TODO::
-    public Optional<User> updateUser(User updatedUser) {return Optional.empty();}
-
-
+    public User deleteUser(User u) {
+        return userStoreMap.remove(u);
+    }
 }

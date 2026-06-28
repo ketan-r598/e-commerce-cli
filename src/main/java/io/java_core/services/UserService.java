@@ -3,6 +3,7 @@ package io.java_core.services;
 import io.java_core.models.User;
 import io.java_core.stores.UserStore;
 
+import java.util.Objects;
 import java.util.Optional;
 
 public class UserService {
@@ -13,25 +14,39 @@ public class UserService {
         this.userStore = userStore;
     }
 
-    public User findByEmail(String email) throws UserNotFoundException {
-        return userStore.findByEmail(email)
-                        .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public Optional<User> findUser(String email) throws IllegalArgumentException {
+        if(email == null || !email.contains("@"))
+            throw new IllegalArgumentException("Email id is not valid...");
+
+        return userStore.findByEmailId(email);
     }
 
-    public User saveUser(User user) throws UserAlreadyExist {
-        return userStore.saveUser(user)
-                .orElseThrow(() -> new UserAlreadyExist("User Already exists"));
+    public Optional<User> saveUser(User u) {
+        Objects.requireNonNull(u);
+
+        if(userStore.findByEmailId(u.getEmail()).isEmpty()) {
+            return Optional.of(userStore.addUser(u));
+        }
+        return Optional.empty();
     }
 
-//    TODO::
-    public User updateUser(User user) {
-        return null;
+    public User updateUser(User u) throws UserNotFoundException {
+        Objects.requireNonNull(u);
+
+        if(userStore.findByEmailId(u.getEmail()).isEmpty()) {
+            throw new UserNotFoundException("User does not exists...");
+        } else {
+            return userStore.updateUser(u);
+        }
     }
 
-//    TODO::
-    public User deleteUser(User user) {
-        return null;
+    public User deleteUser(User u) throws UserNotFoundException {
+        Objects.requireNonNull(u);
+
+        if(userStore.findByEmailId(u.getEmail()).isEmpty()) {
+            throw new UserNotFoundException("User does not exists...");
+        } else {
+            return userStore.deleteUser(u);
+        }
     }
-
-
 }
