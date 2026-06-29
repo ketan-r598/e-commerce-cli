@@ -21,7 +21,7 @@ public class User {
         Objects.requireNonNull(password);
         Objects.requireNonNull(address);
 
-        this.id = UUID.randomUUID().getLeastSignificantBits();
+        this.id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
         this.name = name;
         this.email = email;
         this.password = password;
