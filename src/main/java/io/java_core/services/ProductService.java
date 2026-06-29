@@ -4,6 +4,7 @@ import io.java_core.models.Product;
 import io.java_core.stores.ProductStore;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductService {
 
@@ -16,8 +17,14 @@ public class ProductService {
     public List<Product> getAllProducts() {
         return productStore.getProductList();
     }
-    //  TODO::
-    public void saveProduct() {}
+
+    public Optional<Product> saveProduct(Product product) {
+        return productStore.saveProduct(product);
+    }
+
+    public Optional<Product> findProduct(Long id) {
+        return productStore.findById(id);
+    }
 
     // TODO::
     public void updateProduct() {}

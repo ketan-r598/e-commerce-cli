@@ -1,21 +1,29 @@
 package io.java_core.models;
 
+import io.java_core.utils.GsonUtils;
+
 import java.util.Objects;
 import java.util.UUID;
 
 public class Product {
-    private final String id;
+    private final Long productId;
     private String name;
     private String type;
     private Double price;
 
     public Product(String name, String type, Double price) {
-        this.id = UUID.randomUUID().toString();
+
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(type);
+        Objects.requireNonNull(price);
+
+        this.productId = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
         this.name = name;
         this.type = type;
         this.price = price;
     }
 
+//    Getters
     public String getName() {
         return name;
     }
@@ -28,10 +36,11 @@ public class Product {
         return price;
     }
 
-    public String getId() {
-        return id;
+    public Long getProductId() {
+        return productId;
     }
 
+//    Setters
     public void setType(String type) {
         this.type = type;
     }
@@ -44,21 +53,16 @@ public class Product {
     public boolean equals(Object o) {
         if (!(o instanceof Product)) return false;
         Product product = (Product) o;
-        return Objects.equals(name, product.id);
+        return Objects.equals(name, product.productId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(productId);
     }
 
     @Override
     public String toString() {
-        return "Product{" +
-//                "id=" + id +
-                ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                '}';
+        return GsonUtils.serialize(this);
     }
 }

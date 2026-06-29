@@ -4,50 +4,54 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cart {
-    private final String cartId;
+    private final Long cartId;
 //    private final Long userId;
-    private HashMap<Product, Long> productList;
+    private HashMap<Product,CartItem> cartItemList;
 
     public Cart() {
-        this.cartId = UUID.randomUUID().toString();
+        this.cartId = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
 //        this.userId = userId;
-        this.productList = new HashMap<>();
+        this.cartItemList = new HashMap<>();
     }
 
-    public String getCartId() {
+//    Getters
+    public Long getCartId() {
         return cartId;
     }
 
-    public HashMap<Product, Long> getProductList() {
-        return new HashMap<>(productList);
+    public List<CartItem> getCartItemList() {
+        return cartItemList.values().stream().collect(Collectors.toList());
     }
 
 //    public Long getUserId() {
 //        return userId;
 //    }
 
-    public Cart addProductToCart(Product product) {
-        productList.merge(product, 1L, Long::sum);
-        return this;
+    public void addProduct(Product product) {
+        if(cartItemList.containsKey(product)) {
+            CartItem item = cartItemList.get(product);
+            item.setQuantity(item.getQuantity()+1);
+            cartItemList.put(product,item);
+        } else {
+            cartItemList.put(product,new CartItem(product,1L));
+        }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Cart)) return false;
-        Cart cart = (Cart) o;
-        return Objects.equals(cartId, cart.cartId) && Objects.equals(productList, cart.productList);
+    public void removeProduct(Product product) {
+        if(cartItemList.containsKey(product)) {
+            CartItem item = cartItemList.get(product);
+            if(item.getQuantity() - 1 > 0) {
+                item.setQuantity(item.getQuantity() - 1);
+                cartItemList.put(product, item);
+            } else {
+                cartItemList.remove(product);
+            }
+        }
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(cartId, productList);
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "cartId=" + cartId +
-                ", productList=" + productList.toString() +
-                '}';
+    public void displayCart() {
+        cartItemList.values().stream()
+                .map(cartItem -> cartItem.toString())
+                .forEach(System.out::println);
     }
 }
